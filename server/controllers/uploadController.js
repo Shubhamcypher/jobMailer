@@ -1,4 +1,5 @@
 import { parseExcel } from "../services/excelServices.js";
+import { updateCampaign } from "../services/campaignStore.js";
 
 export const uploadExcelFile = async (req, res) => {
 
@@ -13,6 +14,10 @@ export const uploadExcelFile = async (req, res) => {
 
         //this comes from services/excelService
         const contacts = parseExcel(req.file.path);
+
+        updateCampaign({
+            contacts
+        });
 
         return res.status(200).json({
             success: true,
