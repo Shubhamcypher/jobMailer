@@ -46,6 +46,10 @@ export const uploadResumeFile = async (req, res) => {
             });
         }
 
+        updateCampaign({
+            resume: req.file.path
+        });
+
         return res.status(200).json({
             success: true,
             message: "Resume uploaded successfully",
