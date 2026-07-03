@@ -2,7 +2,6 @@ let campaign = {
     contacts: [],
     resume: null,
     subject: "",
-    template: "",
     status: "idle", // idle | running | paused | completed
     sent: 0,
     failed: 0,
@@ -23,7 +22,6 @@ export const resetCampaign = () => {
         contacts: [],
         resume: null,
         subject: "",
-        template: "",
         status: "idle",
         sent: 0,
         failed: 0,
