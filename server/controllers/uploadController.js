@@ -1,3 +1,5 @@
+import { parseExcel } from "../services/excelServices.js";
+
 export const uploadExcelFile = async (req, res) => {
 
     try {
@@ -5,25 +7,27 @@ export const uploadExcelFile = async (req, res) => {
         if (!req.file) {
             return res.status(400).json({
                 success: false,
-                message: "No Excel file uploaded"
+                message: "No Excel file uploaded."
             });
         }
 
+        //this comes from services/excelService
+        const contacts = parseExcel(req.file.path);
+
         return res.status(200).json({
             success: true,
-            message: "Excel uploaded successfully",
-            file: req.file
+            total: contacts.length,
+            contacts
         });
 
-    } catch (err) {
+    } catch (error) {
 
         return res.status(500).json({
             success: false,
-            message: err.message
+            message: error.message
         });
 
     }
-
 };
 
 export const uploadResumeFile = async (req, res) => {
