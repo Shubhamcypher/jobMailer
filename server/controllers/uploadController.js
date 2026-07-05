@@ -16,8 +16,9 @@ export const uploadExcelFile = async (req, res) => {
         const contacts = parseExcel(req.file.path);
 
         updateCampaign({
-            contacts
-        });
+            contacts,
+            total: contacts.length
+        }); 
 
         return res.status(200).json({
             success: true,
