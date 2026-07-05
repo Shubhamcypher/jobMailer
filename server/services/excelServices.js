@@ -25,7 +25,10 @@ export const parseExcel = (filePath) => {
             if (!row.Email) return false;
 
             // Ignore invalid emails
-            if (!String(row.Email).includes("@")) return false;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailRegex.test(row.Email))
+                return false;
 
             return true;
 
