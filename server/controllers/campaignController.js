@@ -53,12 +53,10 @@ export const sendTestEmail = async (req, res) => {
             html,
 
             attachments: [
-
                 {
-                    filename: "Resume.pdf",
-                    path: campaign.resume
+                    filename: campaign.resume.filename,
+                    path: campaign.resume.path
                 }
-
             ]
 
         });

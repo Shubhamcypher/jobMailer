@@ -18,7 +18,7 @@ export const uploadExcelFile = async (req, res) => {
         updateCampaign({
             contacts,
             total: contacts.length
-        }); 
+        });
 
         return res.status(200).json({
             success: true,
@@ -48,7 +48,10 @@ export const uploadResumeFile = async (req, res) => {
         }
 
         updateCampaign({
-            resume: req.file.path
+            resume: {
+                filename: req.file.filename,
+                path: req.file.path
+            }
         });
 
         return res.status(200).json({
