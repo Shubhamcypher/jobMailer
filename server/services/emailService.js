@@ -21,6 +21,10 @@ export const sendEmail = async ({
 
     });
 
-    return info;
+    return {
+        messageId: info.messageId,
+        accepted: info.accepted,
+        rejected: info.rejected
+    };
 
 };
