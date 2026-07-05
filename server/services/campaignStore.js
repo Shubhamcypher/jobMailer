@@ -1,11 +1,20 @@
 let campaign = {
     contacts: [],
+    total: 0,
+
     resume: null,
     subject: "",
-    status: "idle", // idle | running | paused | completed
+
+    status: "idle",
+
     sent: 0,
     failed: 0,
-    current: 0
+
+    currentIndex: 0,
+    currentContact: null,
+
+    startedAt: null,
+    finishedAt: null
 };
 
 export const getCampaign = () => campaign;
@@ -18,13 +27,22 @@ export const updateCampaign = (data) => {
 };
 
 export const resetCampaign = () => {
-    campaign = {
-        contacts: [],
-        resume: null,
-        subject: "",
-        status: "idle",
-        sent: 0,
-        failed: 0,
-        current: 0
-    };
+    let campaign = {
+    contacts: [],
+    total: 0,
+
+    resume: null,
+    subject: "",
+
+    status: "idle",
+
+    sent: 0,
+    failed: 0,
+
+    currentIndex: 0,
+    currentContact: null,
+
+    startedAt: null,
+    finishedAt: null
+};
 };
