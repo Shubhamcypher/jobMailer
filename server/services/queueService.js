@@ -1,22 +1,85 @@
-const sleep = (ms) =>
-    new Promise(resolve => setTimeout(resolve, ms));
+import { getCampaign, updateCampaign } from "./campaignStore.js";
+import { renderTemplate } from "./templateService.js";
+import { sendEmail } from "./emailService.js";
 
-export const randomDelay = () => {
+export const processQueue = async () => {
 
-    // 30–90 seconds
-    const min = Number(process.env.MIN_DELAY);
-    const max = Number(process.env.MAX_DELAY);
+    const campaign = getCampaign();
 
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    if (!campaign.contacts.length) {
+        console.log("No contacts found.");
+        return;
+    }
 
-};
+    const contact = campaign.contacts[0];
 
-export const wait = async () => {
+    try {
 
-    const delay = randomDelay();
+        const html = renderTemplate({
 
-    console.log(`Waiting ${delay / 1000}s`);
+            name: contact.name,
+            company: contact.company,
+            title: contact.title
 
-    await sleep(delay);
+        });
+
+        await sendEmail({
+
+            to: contact.email,
+
+            subject: campaign.subject,
+
+            html,
+
+            attachments: [
+                {
+                    filename: "Resume.pdf",
+                    path: campaign.resume.path
+                }
+            ]
+
+        });
+
+        updateCampaign({
+
+            sent: campaign.sent + 1,
+
+            failed: 0,
+
+            currentIndex: campaign.currentIndex + 1,
+
+            currentContact: contact
+
+        });
+
+        console.log(`Email sent to ${contact.email}`);
+
+        updateCampaign({
+
+            status: "completed",
+
+            finishedAt: new Date()
+
+        });
+
+    }
+
+    catch (err) {
+
+        updateCampaign({
+
+            failed: campaign.failed + 1,
+
+            currentContact: contact,
+
+            status: "completed",
+
+            finishedAt: new Date()
+
+        });
+
+        console.log(err.message);
+
+    }
 
 };

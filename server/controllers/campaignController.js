@@ -1,3 +1,4 @@
+import { startCampaignService } from "../services/campaignService.js";
 import {
     getCampaign,
     updateCampaign
@@ -81,5 +82,74 @@ export const sendTestEmail = async (req, res) => {
         });
 
     }
+
+};
+
+
+export const startCampaign = async (req, res) => {
+
+    try {
+
+        await startCampaignService();
+
+        return res.json({
+            success: true,
+            message: "Campaign started."
+        });
+
+    }
+
+    catch (err) {
+
+        return res.status(400).json({
+            success: false,
+            message: err.message
+        });
+
+    }
+
+};
+
+export const pauseCampaign = async (req, res) => {
+
+    updateCampaign({
+        status: "paused"
+    });
+
+    res.json({
+        success: true
+    });
+
+};
+
+export const resumeCampaign = async (req, res) => {
+
+    updateCampaign({
+        status: "running"
+    });
+
+    res.json({
+        success: true
+    });
+
+};
+
+export const stopCampaign = async (req, res) => {
+
+    updateCampaign({
+
+        status: "idle",
+
+        sent: 0,
+
+        failed: 0,
+
+        currentContact: null
+
+    });
+
+    res.json({
+        success: true
+    });
 
 };
