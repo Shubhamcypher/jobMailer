@@ -230,6 +230,7 @@ const ContactPreview = ({ campaign }) => {
             duration-300
             hover:scale-105
             active:scale-95
+            cursor-pointer
           '
               >
                 View All Contacts →

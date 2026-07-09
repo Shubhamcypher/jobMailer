@@ -192,6 +192,7 @@ const SubjectInput = ({ campaign, setCampaign }) => {
                 duration-300
                 hover:scale-[1.02]
                 active:scale-95
+                cursor-pointer
             '
       >
         <Save size={18} />

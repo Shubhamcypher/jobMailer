@@ -179,6 +179,7 @@ const TestEmail = ({ campaign }) => {
                 duration-300
                 hover:scale-[1.02]
                 active:scale-95
+                cursor-pointer
             '
       >
         <Send size={18} />

@@ -278,6 +278,7 @@ const ActionButton = ({ icon, label, color, onClick }) => (
       duration-300
       hover:scale-[1.03]
       active:scale-95
+      cursor-pointer
     `}
   >
     {icon}
