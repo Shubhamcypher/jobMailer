@@ -17,7 +17,11 @@ export const uploadExcelFile = async (req, res) => {
 
         updateCampaign({
             contacts,
-            total: contacts.length
+            total: contacts.length,
+            excel: {
+                filename: req.file.originalname,
+                path: req.file.path
+            }
         });
 
         return res.status(200).json({

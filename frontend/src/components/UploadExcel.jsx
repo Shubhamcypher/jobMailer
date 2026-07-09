@@ -21,6 +21,9 @@ const UploadExcel = ({ campaign, setCampaign }) => {
         ...prev,
         contacts: res.data.contacts,
         total: res.data.total,
+        excel: {
+          filename: file.name,
+        },
       }));
     } catch (err) {
       alert(err.response?.data?.message || 'Upload failed');
@@ -110,28 +113,32 @@ const UploadExcel = ({ campaign, setCampaign }) => {
         '
         />
 
-        {file && (
+        {(file || campaign.excel) && (
           <div
             className='
-            mt-5
-            flex
-            items-center
-            gap-3
-            bg-white
-            dark:bg-slate-900
-            border
-            border-slate-200
-            dark:border-slate-700
-            rounded-xl
-            p-3
-          '
+      mt-5
+      flex
+      items-center
+      gap-3
+      bg-white
+      dark:bg-slate-900
+      border
+      border-slate-200
+      dark:border-slate-700
+      rounded-xl
+      p-3
+    '
           >
             <File className='text-blue-600' size={20} />
 
             <div className='flex-1'>
-              <p className='font-medium text-slate-800 dark:text-white'>{file.name}</p>
+              <p className='font-medium text-slate-800 dark:text-white'>
+                {file ? file.name : campaign.excel.filename}
+              </p>
 
-              <p className='text-xs text-slate-500'>Ready to upload</p>
+              <p className='text-xs text-green-600'>
+                {file ? 'Ready to upload' : 'Already uploaded'}
+              </p>
             </div>
           </div>
         )}

@@ -2,6 +2,8 @@ let campaign = {
     contacts: [],
     total: 0,
 
+    excel: null,
+
     resume: null,
     subject: "",
 
@@ -27,22 +29,24 @@ export const updateCampaign = (data) => {
 };
 
 export const resetCampaign = () => {
-    let campaign = {
-    contacts: [],
-    total: 0,
+    campaign = {
+        contacts: [],
+        total: 0,
 
-    resume: null,
-    subject: "",
+        excel: null,
 
-    status: "idle",
+        resume: null,
+        subject: "",
 
-    sent: 0,
-    failed: 0,
+        status: "idle",
 
-    currentIndex: 0,
-    currentContact: null,
+        sent: 0,
+        failed: 0,
 
-    startedAt: null,
-    finishedAt: null
-};
+        currentIndex: 0,
+        currentContact: null,
+
+        startedAt: null,
+        finishedAt: null
+    };
 };

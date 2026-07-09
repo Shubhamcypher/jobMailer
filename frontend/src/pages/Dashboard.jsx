@@ -15,6 +15,7 @@ const Dashboard = () => {
     contacts: [],
     total: 0,
     resume: null,
+    excel: null,
     subject: '',
     status: 'idle',
     sent: 0,
