@@ -1,201 +1,204 @@
-import { useState } from "react";
-import { FileText, Upload, CheckCircle2 } from "lucide-react";
-import { uploadResume } from "../services/campaignApi";
+import { useState } from 'react';
+import { FileText, Upload, CheckCircle2, File } from 'lucide-react';
+import { uploadResume } from '../services/campaignApi';
 
 const UploadResume = ({ campaign, setCampaign }) => {
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-    const [file, setFile] = useState(null);
-    const [loading, setLoading] = useState(false);
+  const handleUpload = async () => {
+    if (!file) return;
 
-    const handleUpload = async () => {
+    try {
+      setLoading(true);
 
-        if (!file) return;
+      const formData = new FormData();
 
-        try {
+      formData.append('resume', file);
 
-            setLoading(true);
+      const res = await uploadResume(formData);
 
-            const formData = new FormData();
+      setCampaign((prev) => ({
+        ...prev,
+        resume: res.data.file,
+      }));
+    } catch (err) {
+      alert(err.response?.data?.message || 'Upload failed.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            formData.append("resume", file);
+  return (
+    <div
+      className='
+            bg-white
+            dark:bg-slate-900
+            border
+            border-slate-200
+            dark:border-slate-700
+            rounded-2xl
+            shadow-lg
+            hover:shadow-xl
+            transition-all
+            duration-300
+            p-6
+        '
+    >
+      {/* Header */}
 
-            const res = await uploadResume(formData);
+      <div className='flex items-center gap-4 mb-6'>
+        <div
+          className='
+                    w-14
+                    h-14
+                    rounded-2xl
+                    bg-linear-to-br
+                    from-blue-500
+                    to-cyan-600
+                    flex
+                    items-center
+                    justify-center
+                    shadow-md
+                '
+        >
+          <FileText className='text-white' size={28} />
+        </div>
 
-            setCampaign(prev => ({
-                ...prev,
-                resume: res.data.file
-            }));
+        <div>
+          <h2 className='text-xl font-bold text-slate-800 dark:text-white'>Upload Resume</h2>
 
-        } catch (err) {
+          <p className='text-sm text-slate-500 dark:text-slate-400'>
+            Upload your latest resume in PDF format
+          </p>
+        </div>
+      </div>
 
-            alert(err.response?.data?.message || "Upload failed.");
+      {/* Upload Area */}
 
-        } finally {
-
-            setLoading(false);
-
-        }
-
-    };
-
-    return (
-
-        <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6">
-
-            <div className="flex items-center gap-3 mb-6">
-
-                <div className="p-3 rounded-xl bg-blue-100">
-
-                    <FileText
-                        className="text-blue-600"
-                        size={26}
-                    />
-
-                </div>
-
-                <div>
-
-                    <h2 className="text-xl font-bold text-slate-800">
-                        Upload Resume
-                    </h2>
-
-                    <p className="text-sm text-slate-500">
-                        Upload your latest resume in PDF format
-                    </p>
-
-                </div>
-
-            </div>
-
-            <input
-
-                type="file"
-
-                accept=".pdf"
-
-                onChange={(e) => setFile(e.target.files[0])}
-
-                className="
+      <div
+        className='
+                border-2
+                border-dashed
+                border-slate-300
+                dark:border-slate-700
+                rounded-2xl
+                p-6
+                bg-slate-50
+                dark:bg-slate-800/40
+                transition
+            '
+      >
+        <input
+          type='file'
+          accept='.pdf'
+          onChange={(e) => setFile(e.target.files[0])}
+          className='
                     w-full
                     text-sm
-                    border
-                    border-slate-300
-                    rounded-xl
-                    p-3
-                    cursor-pointer
+                    dark:text-white
                     file:mr-4
                     file:px-4
                     file:py-2
+                    file:rounded-xl
                     file:border-0
-                    file:bg-blue-100
-                    file:text-blue-700
-                    file:rounded-lg
-                    hover:file:bg-blue-200
-                "
+                    file:bg-blue-600
+                    file:text-white
+                    file:font-medium
+                    file:cursor-pointer
+                    hover:file:bg-blue-700
+                '
+        />
 
-            />
-
-            {
-
-                file && (
-
-                    <div className="mt-4 text-sm text-slate-600">
-
-                        Selected File:
-
-                        <span className="font-semibold ml-2">
-
-                            {file.name}
-
-                        </span>
-
-                    </div>
-
-                )
-
-            }
-
-            <button
-
-                onClick={handleUpload}
-
-                disabled={!file || loading}
-
-                className="
-                    mt-6
-                    w-full
-                    flex
-                    justify-center
-                    items-center
-                    gap-2
-                    bg-blue-600
-                    hover:bg-blue-700
-                    disabled:bg-slate-400
-                    text-white
-                    font-semibold
-                    py-3
-                    rounded-xl
-                    transition
-                "
-
-            >
-
-                <Upload size={18} />
-
-                {
-
-                    loading
-
-                        ?
-
-                        "Uploading..."
-
-                        :
-
-                        "Upload Resume"
-
-                }
-
-            </button>
-
-            {
-
-                campaign.resume && (
-
-                    <div
-                        className="
+        {file && (
+          <div
+            className='
                             mt-5
                             flex
                             items-center
-                            gap-2
-                            bg-green-50
+                            gap-3
+                            bg-white
+                            dark:bg-slate-900
                             border
-                            border-green-200
+                            border-slate-200
+                            dark:border-slate-700
                             rounded-xl
-                            px-4
-                            py-3
-                            text-green-700
-                        "
-                    >
+                            p-3
+                        '
+          >
+            <File className='text-blue-600' size={20} />
 
-                        <CheckCircle2 size={20} />
+            <div className='flex-1'>
+              <p className='font-medium text-slate-800 dark:text-white'>{file.name}</p>
 
-                        <span className="font-medium">
+              <p className='text-xs text-slate-500 dark:text-slate-400'>Ready to upload</p>
+            </div>
+          </div>
+        )}
+      </div>
 
-                            Resume Uploaded Successfully
+      {/* Upload Button */}
 
-                        </span>
+      <button
+        onClick={handleUpload}
+        disabled={!file || loading}
+        className='
+                mt-6
+                w-full
+                flex
+                justify-center
+                items-center
+                gap-2
+                bg-blue-600
+                hover:bg-blue-700
+                disabled:bg-slate-400
+                disabled:cursor-not-allowed
+                text-white
+                font-semibold
+                py-3.5
+                rounded-xl
+                transition-all
+                duration-300
+                hover:scale-[1.02]
+                active:scale-95
+            '
+      >
+        <Upload size={18} />
 
-                    </div>
+        {loading ? 'Uploading...' : 'Upload Resume'}
+      </button>
 
-                )
+      {/* Success */}
 
-            }
+      {campaign.resume && (
+        <div
+          className='
+                        mt-5
+                        flex
+                        items-center
+                        gap-3
+                        rounded-xl
+                        bg-green-50
+                        dark:bg-green-900/20
+                        border
+                        border-green-200
+                        dark:border-green-800
+                        p-4
+                    '
+        >
+          <CheckCircle2 className='text-green-600' size={22} />
 
+          <div>
+            <p className='font-semibold text-green-700 dark:text-green-400'>Resume Uploaded</p>
+
+            <p className='text-sm text-green-600 dark:text-green-500'>
+              Your resume is ready to be attached to every email.
+            </p>
+          </div>
         </div>
-
-    );
-
+      )}
+    </div>
+  );
 };
 
 export default UploadResume;
