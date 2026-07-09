@@ -20,7 +20,9 @@ const UploadResume = ({ campaign, setCampaign }) => {
 
       setCampaign((prev) => ({
         ...prev,
-        resume: res.data.file,
+        resume: {
+          filename: file.name,
+        },
       }));
     } catch (err) {
       alert(err.response?.data?.message || 'Upload failed.');
@@ -110,28 +112,32 @@ const UploadResume = ({ campaign, setCampaign }) => {
                 '
         />
 
-        {file && (
+        {(file || campaign.resume) && (
           <div
             className='
-                            mt-5
-                            flex
-                            items-center
-                            gap-3
-                            bg-white
-                            dark:bg-slate-900
-                            border
-                            border-slate-200
-                            dark:border-slate-700
-                            rounded-xl
-                            p-3
-                        '
+      mt-5
+      flex
+      items-center
+      gap-3
+      bg-white
+      dark:bg-slate-900
+      border
+      border-slate-200
+      dark:border-slate-700
+      rounded-xl
+      p-3
+    '
           >
-            <File className='text-blue-600' size={20} />
+            <FileText className='text-blue-600' size={20} />
 
             <div className='flex-1'>
-              <p className='font-medium text-slate-800 dark:text-white'>{file.name}</p>
+              <p className='font-medium text-slate-800 dark:text-white'>
+                {file ? file.name : campaign.resume.filename}
+              </p>
 
-              <p className='text-xs text-slate-500 dark:text-slate-400'>Ready to upload</p>
+              <p className='text-xs text-green-600'>
+                {file ? 'Ready to upload' : 'Already uploaded'}
+              </p>
             </div>
           </div>
         )}
@@ -166,7 +172,7 @@ const UploadResume = ({ campaign, setCampaign }) => {
       >
         <Upload size={18} />
 
-        {loading ? 'Uploading...' : 'Upload Resume'}
+        {loading ? 'Uploading...' : campaign.resume ? 'Replace Resume' : 'Upload Resume'}
       </button>
 
       {/* Success */}

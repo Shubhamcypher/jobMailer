@@ -53,7 +53,7 @@ export const uploadResumeFile = async (req, res) => {
 
         updateCampaign({
             resume: {
-                filename: req.file.filename,
+                filename: req.file.originalname,
                 path: req.file.path
             }
         });

@@ -107,6 +107,7 @@ const ContactModal = ({ open, onClose, children, total }) => {
                         hover:bg-red-500
                         hover:text-white
                         transition
+                        cursor-pointer
                     "
 
                     >

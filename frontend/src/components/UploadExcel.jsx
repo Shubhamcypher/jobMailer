@@ -173,7 +173,7 @@ const UploadExcel = ({ campaign, setCampaign }) => {
       >
         <Upload size={18} />
 
-        {loading ? 'Uploading...' : 'Upload Contacts'}
+        {loading ? 'Uploading...' : campaign.contacts ? 'Replace Contacts' : 'Upload Contacts'}
       </button>
 
       {/* Success */}
