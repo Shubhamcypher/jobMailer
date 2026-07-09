@@ -72,6 +72,11 @@ const CampaignControls = ({ campaign }) => {
     }
   };
 
+  const minutes = Math.floor(campaign.waitTime / 60);
+  const seconds = campaign.waitTime % 60;
+
+  const timer = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
   const isIdle = campaign.status === 'idle';
   const isRunning = campaign.status === 'running';
   const isPaused = campaign.status === 'paused';
@@ -185,6 +190,26 @@ const CampaignControls = ({ campaign }) => {
           '
           />
         </div>
+        {campaign.status === 'running' && campaign.waitTime > 0 && (
+          <div
+            className='
+      mt-5
+      rounded-xl
+      bg-blue-50
+      dark:bg-blue-900/20
+      border
+      border-blue-200
+      dark:border-blue-800
+      p-4
+    '
+          >
+            <p className='text-sm text-blue-600 dark:text-blue-400'>Next email will be sent in</p>
+
+            <p className='text-3xl font-bold text-blue-700 dark:text-blue-300 tracking-wider'>
+              {timer}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Current Contact */}

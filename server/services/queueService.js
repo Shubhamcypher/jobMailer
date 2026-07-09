@@ -1,84 +1,111 @@
 import { getCampaign, updateCampaign } from "./campaignStore.js";
 import { renderTemplate } from "./templateService.js";
 import { sendEmail } from "./emailService.js";
+import { wait } from "./delayService.js";
 
 export const processQueue = async () => {
 
-    const campaign = getCampaign();
+    while (true) {
 
-    if (!campaign.contacts.length) {
-        console.log("No contacts found.");
-        return;
-    }
+        const campaign = getCampaign();
 
-    const contact = campaign.contacts[0];
+        // Stop if paused
+        if (campaign.status === "paused") {
+            console.log("Campaign paused.");
+            return;
+        }
 
-    try {
+        // Stop if manually stopped
+        if (campaign.status === "idle") {
+            console.log("Campaign stopped.");
+            return;
+        }
 
-        const html = renderTemplate({
+        // Finished?
+        if (campaign.currentIndex >= campaign.contacts.length) {
 
-            name: contact.name,
-            company: contact.company,
-            title: contact.title
+            updateCampaign({
 
-        });
+                status: "completed",
 
-        await sendEmail({
+                finishedAt: new Date(),
 
-            to: contact.email,
+                currentContact: null
 
-            subject: campaign.subject,
+            });
 
-            html,
+            console.log("Campaign completed.");
 
-            attachments: [
-                {
-                    filename: "Resume.pdf",
-                    path: campaign.resume.path
-                }
-            ]
+            return;
+        }
 
-        });
+        const contact = campaign.contacts[campaign.currentIndex];
 
-        updateCampaign({
+        try {
 
-            sent: campaign.sent + 1,
+            const html = renderTemplate({
 
-            failed: 0,
+                name: contact.name,
 
-            currentIndex: campaign.currentIndex + 1,
+                company: contact.company,
 
-            currentContact: contact
+                title: contact.title
 
-        });
+            });
 
-        console.log(`Email sent to ${contact.email}`);
+            await sendEmail({
 
-        updateCampaign({
+                to: contact.email,
 
-            status: "completed",
+                subject: campaign.subject,
 
-            finishedAt: new Date()
+                html,
 
-        });
+                attachments: [
 
-    }
+                    {
 
-    catch (err) {
+                        filename: campaign.resume.filename,
 
-        updateCampaign({
+                        path: campaign.resume.path
 
-            failed: campaign.failed + 1,
+                    }
 
-            currentContact: contact,
+                ]
 
-            status: "completed",
+            });
 
-            finishedAt: new Date()
+            updateCampaign({
 
-        });
+                sent: campaign.sent + 1,
 
-        console.log(err.message);
+                currentIndex: campaign.currentIndex + 1,
+
+                currentContact: contact
+
+            });
+
+            console.log(`✓ Sent to ${contact.email}`);
+
+        }
+
+        catch (err) {
+
+            console.log(err.message);
+
+            updateCampaign({
+
+                failed: campaign.failed + 1,
+
+                currentIndex: campaign.currentIndex + 1,
+
+                currentContact: contact
+
+            });
+
+        }
+
+        await wait();
 
     }
 

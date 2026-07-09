@@ -15,6 +15,9 @@ let campaign = {
     currentIndex: 0,
     currentContact: null,
 
+    waitTime: 0,
+    nextSendAt: null,
+
     startedAt: null,
     finishedAt: null
 };
@@ -45,6 +48,9 @@ export const resetCampaign = () => {
 
         currentIndex: 0,
         currentContact: null,
+
+        waitTime: 0,
+        nextSendAt: null,
 
         startedAt: null,
         finishedAt: null

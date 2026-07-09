@@ -36,7 +36,7 @@ const Dashboard = () => {
 
     loadStatus();
 
-    const interval = setInterval(loadStatus, 2000);
+    const interval = setInterval(loadStatus, 1000);
 
     return () => clearInterval(interval);
   }, []);

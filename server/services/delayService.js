@@ -1,3 +1,5 @@
+import { updateCampaign } from "./campaignStore.js";
+
 const sleep = (ms) =>
     new Promise(resolve => setTimeout(resolve, ms));
 
@@ -11,12 +13,30 @@ export const randomDelay = () => {
 
 };
 
+
+
 export const wait = async () => {
 
     const delay = randomDelay();
 
-    console.log(`Waiting ${delay / 1000}s`);
+    updateCampaign({
+        waitTime: Math.ceil(delay / 1000),
+        nextSendAt: Date.now() + delay
+    });
 
-    await sleep(delay);
+    for (let remaining = Math.ceil(delay / 1000); remaining > 0; remaining--) {
+
+        updateCampaign({
+            waitTime: remaining
+        });
+
+        await sleep(1000);
+
+    }
+
+    updateCampaign({
+        waitTime: 0,
+        nextSendAt: null
+    });
 
 };
