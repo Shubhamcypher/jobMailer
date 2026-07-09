@@ -72,6 +72,11 @@ const CampaignControls = ({ campaign }) => {
     }
   };
 
+  const isIdle = campaign.status === 'idle';
+  const isRunning = campaign.status === 'running';
+  const isPaused = campaign.status === 'paused';
+  const isCompleted = campaign.status === 'completed';
+
   return (
     <div
       className='
@@ -234,6 +239,7 @@ const CampaignControls = ({ campaign }) => {
           label='Start'
           color='bg-green-600 hover:bg-green-700'
           onClick={handleStart}
+          disabled={!(isIdle || isCompleted)}
         />
 
         <ActionButton
@@ -241,6 +247,7 @@ const CampaignControls = ({ campaign }) => {
           label='Pause'
           color='bg-yellow-500 hover:bg-yellow-600'
           onClick={handlePause}
+          disabled={!isRunning}
         />
 
         <ActionButton
@@ -248,6 +255,7 @@ const CampaignControls = ({ campaign }) => {
           label='Resume'
           color='bg-blue-600 hover:bg-blue-700'
           onClick={handleResume}
+          disabled={!isPaused}
         />
 
         <ActionButton
@@ -255,18 +263,30 @@ const CampaignControls = ({ campaign }) => {
           label='Stop'
           color='bg-red-600 hover:bg-red-700'
           onClick={handleStop}
+          disabled={!isRunning}
         />
       </div>
     </div>
   );
 };
 
-const ActionButton = ({ icon, label, color, onClick }) => (
+const ActionButton = ({ icon, label, color, onClick, disabled = false }) => (
   <button
     onClick={onClick}
+    disabled={disabled}
     className={`
-      ${color}
-      text-white
+      ${
+        disabled
+          ? `
+            bg-slate-200
+            dark:bg-slate-800
+            text-slate-400
+            dark:text-slate-500
+            cursor-not-allowed
+          `
+          : `${color} text-white hover:scale-[1.03] active:scale-95 cursor-pointer`
+      }
+
       rounded-xl
       py-3.5
       font-semibold
@@ -276,9 +296,6 @@ const ActionButton = ({ icon, label, color, onClick }) => (
       gap-2
       transition-all
       duration-300
-      hover:scale-[1.03]
-      active:scale-95
-      cursor-pointer
     `}
   >
     {icon}
