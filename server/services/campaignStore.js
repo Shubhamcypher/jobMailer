@@ -1,16 +1,23 @@
 let campaign = {
+
     contacts: [],
     total: 0,
 
     excel: null,
-
     resume: null,
+
     subject: "",
 
     status: "idle",
 
     sent: 0,
+    sentToday: 0,
+
     failed: 0,
+
+    dailyLimit: Number(process.env.DAILY_LIMIT),
+
+    lastSentDate: null,
 
     currentIndex: 0,
     currentContact: null,
@@ -20,6 +27,7 @@ let campaign = {
 
     startedAt: null,
     finishedAt: null
+
 };
 
 export const getCampaign = () => campaign;
@@ -45,6 +53,11 @@ export const resetCampaign = () => {
 
         sent: 0,
         failed: 0,
+
+        sentToday: 0,
+        dailyLimit: Number(process.env.DAILY_LIMIT) || 40,
+
+        lastSentDate: null,
 
         currentIndex: 0,
         currentContact: null,

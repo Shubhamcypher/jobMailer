@@ -4,6 +4,7 @@ import {
     updateCampaign
 } from "../services/campaignStore.js";
 import { sendEmail } from "../services/emailService.js";
+import { processQueue } from "../services/queueService.js";
 import { renderTemplate } from "../services/templateService.js";
 
 export const getCampaignStatus = (req, res) => {
@@ -124,13 +125,53 @@ export const pauseCampaign = async (req, res) => {
 
 export const resumeCampaign = async (req, res) => {
 
-    updateCampaign({
-        status: "running"
-    });
+    try {
 
-    res.json({
-        success: true
-    });
+        const campaign = getCampaign();
+
+        if (campaign.status !== "paused" &&
+            campaign.status !== "daily_limit_reached") {
+
+            return res.status(400).json({
+
+                success: false,
+
+                message: "Campaign cannot be resumed."
+
+            });
+
+        }
+
+        updateCampaign({
+
+            status: "running"
+
+        });
+
+        // Restart queue from currentIndex
+        processQueue();
+
+        return res.json({
+
+            success: true,
+
+            message: "Campaign resumed."
+
+        });
+
+    }
+
+    catch (err) {
+
+        return res.status(500).json({
+
+            success: false,
+
+            message: err.message
+
+        });
+
+    }
 
 };
 

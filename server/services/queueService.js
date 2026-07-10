@@ -7,7 +7,42 @@ export const processQueue = async () => {
 
     while (true) {
 
-        const campaign = getCampaign();
+        let campaign = getCampaign();
+
+        const today = new Date().toDateString();
+
+        if (campaign.lastSentDate && campaign.lastSentDate !== today) {
+
+            updateCampaign({
+
+                sentToday: 0,
+
+                lastSentDate: today
+
+            });
+
+            campaign = getCampaign();
+
+        }
+
+        // Stop if daily limit reached
+        if (campaign.sentToday >= campaign.dailyLimit) {
+
+            updateCampaign({
+
+                status: "daily_limit_reached",
+
+                waitTime: 0,
+
+                nextSendAt: null
+
+            });
+
+            console.log("Daily sending limit reached.");
+
+            return;
+
+        }
 
         // Stop if paused
         if (campaign.status === "paused") {
@@ -79,6 +114,10 @@ export const processQueue = async () => {
 
                 sent: campaign.sent + 1,
 
+                sentToday: campaign.sentToday + 1,
+
+                lastSentDate: new Date().toDateString(),
+
                 currentIndex: campaign.currentIndex + 1,
 
                 currentContact: contact
@@ -96,6 +135,10 @@ export const processQueue = async () => {
             updateCampaign({
 
                 failed: campaign.failed + 1,
+
+                sentToday: campaign.sentToday + 1,
+
+                lastSentDate: new Date().toDateString(),
 
                 currentIndex: campaign.currentIndex + 1,
 
