@@ -22,6 +22,8 @@ let campaign = {
     currentIndex: 0,
     currentContact: null,
 
+    logs: [],
+
     waitTime: 0,
     nextSendAt: null,
 
@@ -62,10 +64,28 @@ export const resetCampaign = () => {
         currentIndex: 0,
         currentContact: null,
 
+        logs: [],
+
         waitTime: 0,
         nextSendAt: null,
 
         startedAt: null,
         finishedAt: null
     };
+};
+
+export const addLog = (type, message) => {
+
+    campaign.logs.unshift({
+
+        id: Date.now(),
+
+        type,
+
+        message,
+
+        time: new Date().toLocaleTimeString()
+
+    });
+
 };

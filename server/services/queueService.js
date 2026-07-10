@@ -1,4 +1,4 @@
-import { getCampaign, updateCampaign } from "./campaignStore.js";
+import { getCampaign, updateCampaign, addLog } from "./campaignStore.js";
 import { renderTemplate } from "./templateService.js";
 import { sendEmail } from "./emailService.js";
 import { wait } from "./delayService.js";
@@ -126,11 +126,21 @@ export const processQueue = async () => {
 
             console.log(`✓ Sent to ${contact.email}`);
 
+            addLog(
+                "success",
+                `Email sent to ${contact.email}`
+            );
+
         }
 
         catch (err) {
 
             console.log(err.message);
+
+            addLog(
+                "error",
+                `Failed to send email to ${contact.email}: ${err.message}`
+            );
 
             updateCampaign({
 
