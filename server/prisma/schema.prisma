@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CampaignStatus {
+  idle
+  running
+  paused
+  completed
+  daily_limit_reached
+}
+
+enum ContactStatus {
+  pending
+  sent
+  failed
+}
+
+enum UploadType {
+  excel
+  resume
+}
+
+model Campaign {
+
+  id              String            @id @default(cuid())
+
+  /// Display name of campaign
+  name            String
+
+  /// Email subject
+  subject         String
+
+  status          CampaignStatus    @default(idle)
+
+  total           Int               @default(0)
+
+  sent            Int               @default(0)
+
+  failed          Int               @default(0)
+
+  sentToday       Int               @default(0)
+
+  dailyLimit      Int               @default(40)
+
+  waitTime        Int               @default(0)
+
+  lastSentDate    DateTime?
+
+  startedAt       DateTime?
+
+  finishedAt      DateTime?
+
+  createdAt       DateTime          @default(now())
+
+  updatedAt       DateTime          @updatedAt
+
+  contacts        Contact[]
+
+  uploads         Upload[]
+
+  logs            CampaignLog[]
+
+  @@index([status])
+
+}
+
+model Contact {
+
+  id              String            @id @default(cuid())
+
+  campaignId      String
+
+  campaign        Campaign          @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  name            String
+
+  company         String
+
+  title           String
+
+  email           String            @db.VarChar(255)
+
+  status          ContactStatus     @default(pending)
+
+  attempts        Int               @default(0)
+
+  sentAt          DateTime?
+
+  error           String?
+
+  createdAt       DateTime          @default(now())
+
+  updatedAt       DateTime          @updatedAt
+
+  @@index([campaignId, status])
+
+  @@index([email])
+
+}
+
+model Upload {
+
+  id              String            @id @default(cuid())
+
+  campaignId      String
+
+  campaign        Campaign          @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  type            UploadType
+
+  filename        String
+
+  path            String
+
+  uploadedAt      DateTime          @default(now())
+
+  @@index([campaignId])
+
+}
+
+model CampaignLog {
+
+  id              String            @id @default(cuid())
+
+  campaignId      String
+
+  campaign        Campaign          @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  level           String
+
+  message         String
+
+  createdAt       DateTime          @default(now())
+
+  @@index([campaignId])
+
+}
