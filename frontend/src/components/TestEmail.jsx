@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FlaskConical, Send, CheckCircle2, XCircle, AlertTriangle, Mail } from 'lucide-react';
 
 import { sendTestEmail } from '../services/campaignApi';
+import toast from 'react-hot-toast';
 
 const TestEmail = ({ campaign }) => {
   const [email, setEmail] = useState('');
@@ -18,9 +19,9 @@ const TestEmail = ({ campaign }) => {
 
       await sendTestEmail(email);
 
-      alert('Test email sent successfully.');
+      toast.success('Test email sent successfully.');
     } catch (err) {
-      alert(err.response?.data?.message || 'Failed to send email.');
+      toast.error(err.response?.data?.message || 'Failed to send email.');
     } finally {
       setLoading(false);
     }

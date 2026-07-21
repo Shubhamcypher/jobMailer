@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { FileText, Upload, CheckCircle2, File } from 'lucide-react';
+import { FileText, Upload, CheckCircle2 } from 'lucide-react';
 import { uploadResume } from '../services/campaignApi';
+import toast from 'react-hot-toast';
 
 const UploadResume = ({ campaign, setCampaign }) => {
   const [file, setFile] = useState(null);
@@ -24,8 +25,9 @@ const UploadResume = ({ campaign, setCampaign }) => {
           filename: file.name,
         },
       }));
+      toast.success(res.data.message)
     } catch (err) {
-      alert(err.response?.data?.message || 'Upload failed.');
+      toast.error(err.response?.data?.message || 'Upload failed.');
     } finally {
       setLoading(false);
     }

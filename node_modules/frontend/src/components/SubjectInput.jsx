@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Mail, Save, CheckCircle2, Type } from 'lucide-react';
 import { updateSubject } from '../services/campaignApi';
+import toast from 'react-hot-toast';
 
 const SubjectInput = ({ campaign, setCampaign }) => {
   const [subject, setSubject] = useState(campaign.subject || '');
@@ -28,7 +29,7 @@ const SubjectInput = ({ campaign, setCampaign }) => {
         setSaved(false);
       }, 2500);
     } catch (err) {
-      alert(err.response?.data?.message || 'Failed to save subject.');
+      toast.error(err.response?.data?.message || 'Failed to save subject.');
     } finally {
       setLoading(false);
     }

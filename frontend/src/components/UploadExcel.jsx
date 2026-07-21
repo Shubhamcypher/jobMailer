@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FileSpreadsheet, Upload, CheckCircle2, File } from 'lucide-react';
 import { uploadExcel } from '../services/campaignApi';
+import toast from 'react-hot-toast';
 
 const UploadExcel = ({ campaign, setCampaign }) => {
   const [file, setFile] = useState(null);
@@ -24,9 +25,10 @@ const UploadExcel = ({ campaign, setCampaign }) => {
         excel: {
           filename: file.name,
         },
-      }));
+      }));      
+      toast.success(`${res.data.total} contact addedd`)
     } catch (err) {
-      alert(err.response?.data?.message || 'Upload failed');
+      toast.error(err.response?.data?.message || 'Upload failed');
     } finally {
       setLoading(false);
     }
