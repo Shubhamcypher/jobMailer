@@ -28,13 +28,13 @@ export const startScheduler = () => {
 
         console.log("▶ Resuming campaign automatically...");
 
-        processQueue();
+        void processQueue();
     });
 
 };
 
 
-export const recoverCampaign = async() => {
+export const recoverCampaign = async () => {
 
     const campaign = await getRawCampaignService();
 
@@ -42,7 +42,7 @@ export const recoverCampaign = async() => {
 
         console.log("♻ Recovering running campaign...");
 
-        processQueue();
+        void processQueue();
 
     }
 

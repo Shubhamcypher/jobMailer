@@ -13,6 +13,7 @@ import {
     incrementFailedCount,
     resetDailyCounter,
 } from "../repositories/campaignRepository.js";
+import { updateCampaignService } from "./campaignDbService.js";
 
 export const processQueue = async () => {
 
@@ -81,13 +82,13 @@ export const processQueue = async () => {
 
         if (!contact) {
 
-            await setCurrentStatus(
+            await updateCampaignService({
 
-                dbCampaign.id,
-
-                "completed"
-
-            );
+                status: "completed",
+            
+                finishedAt: new Date()
+            
+            });
 
             updateRuntimeState({
                 currentContact: null

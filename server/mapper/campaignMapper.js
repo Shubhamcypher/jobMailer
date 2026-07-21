@@ -51,7 +51,7 @@ export const mapCampaign = (campaign) => {
 
         lastSentDate: campaign.lastSentDate,
 
-        contacts: campaign.contacts ?? [],
+        contacts: campaign.contacts,
 
         resume,
 

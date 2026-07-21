@@ -7,7 +7,6 @@ import {
   User,
   Mail,
   Building2,
-  CheckCircle2,
   XCircle,
 } from 'lucide-react';
 
