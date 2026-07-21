@@ -1,4 +1,3 @@
-import { updateRuntimeState } from "./runtimeState.js";
 import { getRawCampaignService, updateCampaignService } from "./campaignDbService.js";
 import { processQueue } from "./queueService.js";
 
@@ -30,12 +29,6 @@ export const startCampaignService = async () => {
         startedAt: new Date(),
 
         finishedAt: null
-
-    });
-
-    updateRuntimeState({
-
-        currentContact: null
 
     });
 

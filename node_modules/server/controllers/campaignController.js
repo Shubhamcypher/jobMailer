@@ -1,220 +1,254 @@
-   import { startCampaignService } from "../services/campaignService.js";
+import { startCampaignService } from "../services/campaignService.js";
 
-    import {
-        getRawCampaignService,
-        updateCampaignService
-    } from "../services/campaignDbService.js";
+import {
+    getRawCampaignService,
+    updateCampaignService
+} from "../services/campaignDbService.js";
 
-    import { sendEmail } from "../services/emailService.js";
-    import { processQueue } from "../services/queueService.js";
-    import { renderTemplate } from "../services/templateService.js";
+import { sendEmail } from "../services/emailService.js";
+import { processQueue } from "../services/queueService.js";
+import { renderTemplate } from "../services/templateService.js";
 
-    import { getCampaignService } from "../services/campaignDbService.js";
+import { getCampaignService } from "../services/campaignDbService.js";
 
-    export const getCampaignStatus = async (req, res) => {
+import {
+    resetCampaign
+} from "../repositories/campaignRepository.js";
 
-        try {
+import {
+    resetContacts
+} from "../repositories/contactRepository.js";
 
-            const campaign = await getCampaignService();
+import {
+    resetRuntimeState
+} from "../services/runtimeState.js";
 
-            return res.json(campaign);
+export const getCampaignStatus = async (req, res) => {
 
-        }
+    try {
 
-        catch (err) {
+        const campaign = await getCampaignService();
 
-            return res.status(500).json({
+        return res.json(campaign);
 
-                success: false,
+    }
 
-                message: err.message
+    catch (err) {
 
-            });
+        return res.status(500).json({
 
-        }
+            success: false,
 
-    };
+            message: err.message
 
-    export const updateEmailDetails = async (req, res) => {
-
-        const { subject } = req.body;
-
-        await updateCampaignService({
-            subject
         });
 
-        res.json({
-            success: true
+    }
+
+};
+
+export const updateEmailDetails = async (req, res) => {
+
+    const { subject } = req.body;
+
+    await updateCampaignService({
+        subject
+    });
+
+    res.json({
+        success: true
+    });
+
+};
+
+
+export const sendTestEmail = async (req, res) => {
+
+    try {
+
+        const { email } = req.body;
+
+        const campaign = await getRawCampaignService();
+
+        const resume = campaign.uploads.find(
+            upload => upload.type === "resume"
+        );
+
+        if (!resume) {
+            throw new Error("Resume not uploaded.");
+        }
+
+        const html = renderTemplate({
+
+            name: "Shubham",
+
+            company: "OpenAI",
+
+            title: "Software Engineer"
+
         });
 
-    };
+        await sendEmail({
+
+            to: email,
+
+            subject: campaign.subject,
+
+            html,
+
+            attachments: [
+                {
+                    filename: resume.filename,
+                    path: resume.path
+                }
+            ]
+
+        });
+
+        return res.status(200).json({
+
+            success: true,
+            message: "Test email sent successfully."
+
+        });
+
+    }
+
+    catch (err) {
+
+        return res.status(500).json({
+
+            success: false,
+
+            message: err.message
+
+        });
+
+    }
+
+};
 
 
-    export const sendTestEmail = async (req, res) => {
+export const startCampaign = async (req, res) => {
 
-        try {
+    try {
 
-            const { email } = req.body;
+        await startCampaignService();
 
-            const campaign = await getRawCampaignService();
+        return res.json({
+            success: true,
+            message: "Campaign started."
+        });
 
-            const resume = campaign.uploads.find(
-                upload => upload.type === "resume"
-            );
+    }
 
-            if (!resume) {
-                throw new Error("Resume not uploaded.");
-            }
+    catch (err) {
 
-            const html = renderTemplate({
+        return res.status(400).json({
+            success: false,
+            message: err.message
+        });
 
-                name: "Shubham",
+    }
 
-                company: "OpenAI",
+};
 
-                title: "Software Engineer"
+export const pauseCampaign = async (req, res) => {
 
-            });
+    await updateCampaignService({
+        status: "paused"
+    });
 
-            await sendEmail({
+    res.json({
+        success: true
+    });
 
-                to: email,
+};
 
-                subject: campaign.subject,
+export const resumeCampaign = async (req, res) => {
 
-                html,
+    try {
 
-                attachments: [
-                    {
-                        filename: resume.filename,
-                        path: resume.path
-                    }
-                ]
+        const campaign = await getRawCampaignService();
 
-            });
-
-            return res.status(200).json({
-
-                success: true,
-                message: "Test email sent successfully."
-
-            });
-
-        }
-
-        catch (err) {
-
-            return res.status(500).json({
-
-                success: false,
-
-                message: err.message
-
-            });
-
-        }
-
-    };
-
-
-    export const startCampaign = async (req, res) => {
-
-        try {
-
-            await startCampaignService();
-
-            return res.json({
-                success: true,
-                message: "Campaign started."
-            });
-
-        }
-
-        catch (err) {
+        if (campaign.status !== "paused" &&
+            campaign.status !== "daily_limit_reached") {
 
             return res.status(400).json({
-                success: false,
-                message: err.message
-            });
-
-        }
-
-    };
-
-    export const pauseCampaign = async (req, res) => {
-
-        await updateCampaignService({
-            status: "paused"
-        });
-
-        res.json({
-            success: true
-        });
-
-    };
-
-    export const resumeCampaign = async (req, res) => {
-
-        try {
-
-            const campaign = await getRawCampaignService();
-
-            if (campaign.status !== "paused" &&
-                campaign.status !== "daily_limit_reached") {
-
-                return res.status(400).json({
-
-                    success: false,
-
-                    message: "Campaign cannot be resumed."
-
-                });
-
-            }
-
-            await updateCampaignService({
-
-                status: "running"
-
-            });
-
-            // Restart queue from currentIndex
-            processQueue();
-
-            return res.json({
-
-                success: true,
-
-                message: "Campaign resumed."
-
-            });
-
-        }
-
-        catch (err) {
-
-            return res.status(500).json({
 
                 success: false,
 
-                message: err.message
+                message: "Campaign cannot be resumed."
 
             });
 
         }
 
-    };
-
-    export const stopCampaign = async (req, res) => {
-
         await updateCampaignService({
 
-            status: "idle"
+            status: "running"
 
         });
 
-        res.json({
-            success: true
+        // Restart queue from currentIndex
+        processQueue();
+
+        return res.json({
+
+            success: true,
+
+            message: "Campaign resumed."
+
         });
 
-    };
+    }
+
+    catch (err) {
+
+        return res.status(500).json({
+
+            success: false,
+
+            message: err.message
+
+        });
+
+    }
+
+};
+
+export const stopCampaign = async (req, res) => {
+
+    try {
+
+        const campaign = await getRawCampaignService();
+
+        await resetCampaign(campaign.id);
+
+        await resetContacts(campaign.id);
+
+        resetRuntimeState();
+
+        return res.json({
+
+            success: true,
+
+            message: "Campaign stopped."
+
+        });
+
+    }
+
+    catch (err) {
+
+        return res.status(500).json({
+
+            success: false,
+
+            message: err.message
+
+        });
+
+    }
+
+};

@@ -169,3 +169,35 @@ export const resetDailyCounter = async (campaignId) => {
     });
 
 };
+
+export const resetCampaign = async (campaignId) => {
+
+    return await prisma.campaign.update({
+
+        where: {
+
+            id: campaignId
+
+        },
+
+        data: {
+
+            status: "idle",
+
+            sent: 0,
+
+            failed: 0,
+
+            sentToday: 0,
+
+            startedAt: null,
+
+            finishedAt: null,
+
+            lastSentDate: null
+
+        }
+
+    });
+
+};

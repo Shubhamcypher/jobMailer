@@ -142,3 +142,29 @@ export const markContactFailed = async (
     });
 
 };
+
+export const resetContacts = async (campaignId) => {
+
+    return await prisma.contact.updateMany({
+
+        where: {
+
+            campaignId
+
+        },
+
+        data: {
+
+            status: "pending",
+
+            attempts: 0,
+
+            sentAt: null,
+
+            error: null
+
+        }
+
+    });
+
+};

@@ -23,3 +23,7 @@ build/
 .vscode/
 .idea/
 /generated/prisma
+
+#No document
+uploads/excel/
+uploads/resume/
