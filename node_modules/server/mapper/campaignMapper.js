@@ -1,4 +1,7 @@
+import { getRuntimeState } from "../services/runtimeState.js";
+
 export const mapCampaign = (campaign) => {
+    const runtime = getRuntimeState();
 
     if (!campaign) {
 
@@ -38,11 +41,13 @@ export const mapCampaign = (campaign) => {
 
         dailyLimit: campaign.dailyLimit,
 
-        waitTime: campaign.waitTime,
+        waitTime: runtime.waitTime,
 
         startedAt: campaign.startedAt,
 
         finishedAt: campaign.finishedAt,
+
+        nextSendAt: runtime.nextSendAt,
 
         lastSentDate: campaign.lastSentDate,
 
@@ -52,12 +57,9 @@ export const mapCampaign = (campaign) => {
 
         excel,
 
-        // Temporary until queue is migrated
-        currentContact: null,
-
-        currentIndex: 0,
-
-        logs: []
+        currentContact: runtime.currentContact,
+        
+        logs: runtime.logs,
 
     };
 

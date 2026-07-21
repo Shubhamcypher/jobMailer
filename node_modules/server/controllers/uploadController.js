@@ -1,5 +1,3 @@
-import { updateRuntimeState } from "../services/runtimeState.js";
-
 import {
     uploadExcelService, uploadResumeService
 } from "../services/campaignDbService.js";
@@ -24,22 +22,6 @@ export const uploadExcelFile = async (req, res) => {
 
         const result = await uploadExcelService(req.file);
 
-        // Temporary until campaignStore is removed
-        updateRuntimeState({
-
-            contacts: result.contacts,
-
-            total: result.total,
-
-            excel: {
-
-                filename: req.file.originalname,
-
-                path: req.file.path
-
-            }
-
-        });
 
         return res.status(200).json({
 
@@ -77,19 +59,6 @@ export const uploadResumeFile = async (req, res) => {
                 message: "No Resume uploaded"
             });
         }
-
-        // Temporary (until campaignStore is removed)
-        updateRuntimeState({
-
-            resume: {
-
-                filename: req.file.originalname,
-
-                path: req.file.path
-
-            }
-
-        });
 
         // PostgreSQL
         await uploadResumeService(req.file);

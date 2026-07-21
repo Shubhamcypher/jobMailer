@@ -1,14 +1,20 @@
-import { getRuntimeState, updateRuntimeState } from "./runtimeState.js";
+import { updateRuntimeState } from "./runtimeState.js";
+import { getRawCampaignService, updateCampaignService } from "./campaignDbService.js";
 import { processQueue } from "./queueService.js";
 
 export const startCampaignService = async () => {
 
-    const campaign = getRuntimeState();
+    const campaign = await getRawCampaignService();
+
 
     if (!campaign.contacts.length)
         throw new Error("Upload contacts first.");
 
-    if (!campaign.resume)
+    const resume = campaign.uploads.find(
+        upload => upload.type === "resume"
+    );
+
+    if (!resume)
         throw new Error("Upload resume first.");
 
     if (!campaign.subject)
@@ -17,22 +23,22 @@ export const startCampaignService = async () => {
     if (campaign.status === "running")
         throw new Error("Campaign already running.");
 
-    updateRuntimeState({
+    await updateCampaignService({
 
         status: "running",
 
-        sent: 0,
+        startedAt: new Date(),
 
-        failed: 0,
-
-        currentContact: null,
-
-        currentIndex: 0,
-
-        startedAt: new Date()
+        finishedAt: null
 
     });
 
-   await processQueue();
+    updateRuntimeState({
+
+        currentContact: null
+
+    });
+
+    await processQueue();
 
 };

@@ -39,15 +39,6 @@ export const processQueue = async () => {
 
             await resetDailyCounter(dbCampaign.id);
 
-            // Temporary until campaignStore is removed
-            updateRuntimeState({
-
-                sentToday: 0,
-
-                lastSentDate: today
-
-            });
-
         }
 
         // Stop if daily limit reached
@@ -61,13 +52,8 @@ export const processQueue = async () => {
 
             );
 
-            // Temporary until campaignStore is removed
             updateRuntimeState({
-
-                status: "daily_limit_reached",
-
                 waitTime: 0,
-
                 nextSendAt: null
 
             });
@@ -103,15 +89,8 @@ export const processQueue = async () => {
 
             );
 
-            // Temporary until campaignStore is removed
             updateRuntimeState({
-
-                status: "completed",
-
-                finishedAt: new Date(),
-
                 currentContact: null
-
             });
 
             console.log("Campaign completed.");
@@ -159,15 +138,7 @@ export const processQueue = async () => {
             await incrementSentCount(dbCampaign.id);
 
             updateRuntimeState({
-
-                sent: dbCampaign.sent + 1,
-
-                sentToday: dbCampaign.sentToday + 1,
-
-                lastSentDate: new Date().toDateString(),
-
                 currentContact: contact
-
             });
 
             console.log(`✓ Sent to ${contact.email}`);
@@ -193,17 +164,7 @@ export const processQueue = async () => {
             await incrementFailedCount(dbCampaign.id);
 
             updateRuntimeState({
-
-                failed: dbCampaign.failed + 1,
-
-                sentToday: dbCampaign.sentToday + 1,
-
-                lastSentDate: new Date().toDateString(),
-
-                // currentIndex: campaign.currentIndex + 1,
-
                 currentContact: contact
-
             });
 
         }
