@@ -1,4 +1,4 @@
-import { updateCampaign } from "../services/campaignStore.js";
+import { updateRuntimeState } from "../services/runtimeState.js";
 
 import {
     uploadExcelService, uploadResumeService
@@ -25,7 +25,7 @@ export const uploadExcelFile = async (req, res) => {
         const result = await uploadExcelService(req.file);
 
         // Temporary until campaignStore is removed
-        updateCampaign({
+        updateRuntimeState({
 
             contacts: result.contacts,
 
@@ -79,7 +79,7 @@ export const uploadResumeFile = async (req, res) => {
         }
 
         // Temporary (until campaignStore is removed)
-        updateCampaign({
+        updateRuntimeState({
 
             resume: {
 

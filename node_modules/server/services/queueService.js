@@ -1,4 +1,4 @@
-import { updateCampaign, addLog } from "./campaignStore.js";
+import { updateRuntimeState, addLog } from "./runtimeState.js";
 import { renderTemplate } from "./templateService.js";
 import { sendEmail } from "./emailService.js";
 import { wait } from "./delayService.js";
@@ -40,7 +40,7 @@ export const processQueue = async () => {
             await resetDailyCounter(dbCampaign.id);
 
             // Temporary until campaignStore is removed
-            updateCampaign({
+            updateRuntimeState({
 
                 sentToday: 0,
 
@@ -62,7 +62,7 @@ export const processQueue = async () => {
             );
 
             // Temporary until campaignStore is removed
-            updateCampaign({
+            updateRuntimeState({
 
                 status: "daily_limit_reached",
 
@@ -104,7 +104,7 @@ export const processQueue = async () => {
             );
 
             // Temporary until campaignStore is removed
-            updateCampaign({
+            updateRuntimeState({
 
                 status: "completed",
 
@@ -158,7 +158,7 @@ export const processQueue = async () => {
 
             await incrementSentCount(dbCampaign.id);
 
-            updateCampaign({
+            updateRuntimeState({
 
                 sent: dbCampaign.sent + 1,
 
@@ -192,7 +192,7 @@ export const processQueue = async () => {
 
             await incrementFailedCount(dbCampaign.id);
 
-            updateCampaign({
+            updateRuntimeState({
 
                 failed: dbCampaign.failed + 1,
 

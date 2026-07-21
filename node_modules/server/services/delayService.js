@@ -1,4 +1,4 @@
-import { updateCampaign } from "./campaignStore.js";
+import { updateRuntimeState } from "./runtimeState.js";
 
 const sleep = (ms) =>
     new Promise(resolve => setTimeout(resolve, ms));
@@ -19,14 +19,14 @@ export const wait = async () => {
 
     const delay = randomDelay();
 
-    updateCampaign({
+    updateRuntimeState({
         waitTime: Math.ceil(delay / 1000),
         nextSendAt: Date.now() + delay
     });
 
     for (let remaining = Math.ceil(delay / 1000); remaining > 0; remaining--) {
 
-        updateCampaign({
+        updateRuntimeState({
             waitTime: remaining
         });
 
@@ -34,7 +34,7 @@ export const wait = async () => {
 
     }
 
-    updateCampaign({
+    updateRuntimeState({
         waitTime: 0,
         nextSendAt: null
     });

@@ -1,11 +1,11 @@
 import cron from "node-cron";
-import { getCampaign, updateCampaign } from "./campaignStore.js";
+import { getRuntimeState, updateRuntimeState } from "./runtimeState.js";
 import { processQueue } from "./queueService.js";
 
 export const startScheduler = () => {
 
     cron.schedule("0 11 * * 1-5", () => {
-        const campaign = getCampaign();
+        const campaign = getRuntimeState();
 
         if (campaign.status !== "daily_limit_reached") {
 
@@ -15,7 +15,7 @@ export const startScheduler = () => {
 
         }
 
-        updateCampaign({
+        updateRuntimeState({
 
             sentToday: 0,
 
@@ -33,7 +33,7 @@ export const startScheduler = () => {
 
 export const recoverCampaign = () => {
 
-    const campaign = getCampaign();
+    const campaign = getRuntimeState();
 
     if (campaign.status === "running") {
 

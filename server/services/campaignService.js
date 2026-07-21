@@ -1,9 +1,9 @@
-import { getCampaign, updateCampaign } from "./campaignStore.js";
+import { getRuntimeState, updateRuntimeState } from "./runtimeState.js";
 import { processQueue } from "./queueService.js";
 
 export const startCampaignService = async () => {
 
-    const campaign = getCampaign();
+    const campaign = getRuntimeState();
 
     if (!campaign.contacts.length)
         throw new Error("Upload contacts first.");
@@ -17,7 +17,7 @@ export const startCampaignService = async () => {
     if (campaign.status === "running")
         throw new Error("Campaign already running.");
 
-    updateCampaign({
+    updateRuntimeState({
 
         status: "running",
 
