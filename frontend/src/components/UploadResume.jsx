@@ -37,14 +37,17 @@ const UploadResume = ({ campaign, setCampaign }) => {
     <div
       className='
             bg-white
-            dark:bg-slate-900
+            dark:bg-[#11162236]
+            backdrop-blur-sm
             border
-            border-slate-200
-            dark:border-slate-700
+            border-slate-200/80
+            dark:border-white/10
             rounded-2xl
-            shadow-lg
-            hover:shadow-xl
-            transition-all
+            shadow-[0_1px_2px_rgba(0,0,0,0.04),0_12px_32px_-16px_rgba(0,0,0,0.12)]
+            dark:shadow-[0_1px_0_rgba(255,255,255,0.04),0_20px_40px_-20px_rgba(0,0,0,0.6)]
+            hover:border-slate-300
+            dark:hover:border-white/20
+            transition-colors
             duration-300
             p-6
         '
@@ -54,25 +57,28 @@ const UploadResume = ({ campaign, setCampaign }) => {
       <div className='flex items-center gap-4 mb-6'>
         <div
           className='
-                    w-14
-                    h-14
-                    rounded-2xl
-                    bg-linear-to-br
-                    from-blue-500
-                    to-cyan-600
+                    w-12
+                    h-12
+                    rounded-xl
+                    bg-slate-50
+                    dark:bg-white/3
+                    border
+                    border-slate-200/80
+                    dark:border-white/10
                     flex
                     items-center
                     justify-center
-                    shadow-md
                 '
         >
-          <FileText className='text-white' size={28} />
+          <FileText className='text-sky-600 dark:text-sky-400' size={22} strokeWidth={1.75} />
         </div>
 
         <div>
-          <h2 className='text-xl font-bold text-slate-800 dark:text-white'>Upload Resume</h2>
+          <h2 className='text-[17px] font-semibold tracking-tight text-slate-900 dark:text-white'>
+            Upload Resume
+          </h2>
 
-          <p className='text-sm text-slate-500 dark:text-slate-400'>
+          <p className='text-sm text-slate-400 dark:text-slate-500'>
             Upload your latest resume in PDF format
           </p>
         </div>
@@ -82,14 +88,14 @@ const UploadResume = ({ campaign, setCampaign }) => {
 
       <div
         className='
-                border-2
+                border
                 border-dashed
                 border-slate-300
-                dark:border-slate-700
+                dark:border-white/15
                 rounded-2xl
                 p-6
-                bg-slate-50
-                dark:bg-slate-800/40
+                bg-slate-50/60
+                dark:bg-white/2
                 transition
             '
       >
@@ -100,17 +106,23 @@ const UploadResume = ({ campaign, setCampaign }) => {
           className='
                     w-full
                     text-sm
-                    dark:text-white
+                    text-slate-600
+                    dark:text-slate-300
                     file:mr-4
                     file:px-4
                     file:py-2
-                    file:rounded-xl
+                    file:rounded-lg
                     file:border-0
-                    file:bg-blue-600
+                    file:bg-[#111827]
+                    dark:file:bg-[#C9A227]
                     file:text-white
+                    dark:file:text-[#0B0F19]
                     file:font-medium
+                    file:text-sm
                     file:cursor-pointer
-                    hover:file:bg-blue-700
+                    hover:file:bg-[#1C2333]
+                    dark:hover:file:bg-[#B8931F]
+                    file:transition-colors
                 '
         />
 
@@ -122,22 +134,22 @@ const UploadResume = ({ campaign, setCampaign }) => {
       items-center
       gap-3
       bg-white
-      dark:bg-slate-900
+      dark:bg-white/3
       border
-      border-slate-200
-      dark:border-slate-700
+      border-slate-200/80
+      dark:border-white/10
       rounded-xl
       p-3
     '
           >
-            <FileText className='text-blue-600' size={20} />
+            <FileText className='text-slate-400 dark:text-slate-500' size={20} strokeWidth={1.75} />
 
             <div className='flex-1'>
-              <p className='font-medium text-slate-800 dark:text-white'>
+              <p className='font-medium text-sm text-slate-800 dark:text-white'>
                 {file ? file.name : campaign.resume.filename}
               </p>
 
-              <p className='text-xs text-green-600'>
+              <p className='text-xs text-emerald-600 dark:text-emerald-400'>
                 {file ? 'Ready to upload' : 'Already uploaded'}
               </p>
             </div>
@@ -157,22 +169,29 @@ const UploadResume = ({ campaign, setCampaign }) => {
                 justify-center
                 items-center
                 gap-2
-                bg-blue-600
-                hover:bg-blue-700
-                disabled:bg-slate-400
+                bg-[#111827]
+                dark:bg-[#C9A227]
+                hover:bg-[#1C2333]
+                dark:hover:bg-[#B8931F]
+                disabled:bg-slate-200
+                dark:disabled:bg-white/10
+                disabled:text-slate-400
+                dark:disabled:text-slate-500
                 disabled:cursor-not-allowed
                 text-white
-                font-semibold
-                py-3.5
+                dark:text-[#0B0F19]
+                font-medium
+                text-sm
+                tracking-tight
+                py-3
                 rounded-xl
-                transition-all
-                duration-300
-                hover:scale-[1.02]
-                active:scale-95
+                transition-colors
+                duration-200
+                active:scale-[0.98]
                 cursor-pointer
             '
       >
-        <Upload size={18} />
+        <Upload size={16} strokeWidth={2} />
 
         {loading ? 'Uploading...' : campaign.resume ? 'Replace Resume' : 'Upload Resume'}
       </button>
@@ -187,20 +206,22 @@ const UploadResume = ({ campaign, setCampaign }) => {
                         items-center
                         gap-3
                         rounded-xl
-                        bg-green-50
-                        dark:bg-green-900/20
+                        bg-emerald-50
+                        dark:bg-emerald-500/10
                         border
-                        border-green-200
-                        dark:border-green-800
+                        border-emerald-200/80
+                        dark:border-emerald-500/20
                         p-4
                     '
         >
-          <CheckCircle2 className='text-green-600' size={22} />
+          <CheckCircle2 className='text-emerald-600 dark:text-emerald-400' size={20} strokeWidth={1.75} />
 
           <div>
-            <p className='font-semibold text-green-700 dark:text-green-400'>Resume Uploaded</p>
+            <p className='font-semibold text-sm text-emerald-700 dark:text-emerald-400'>
+              Resume Uploaded
+            </p>
 
-            <p className='text-sm text-green-600 dark:text-green-500'>
+            <p className='text-sm text-emerald-600/90 dark:text-emerald-500/80'>
               Your resume is ready to be attached to every email.
             </p>
           </div>

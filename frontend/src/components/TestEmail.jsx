@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FlaskConical, Send, CheckCircle2, XCircle, AlertTriangle, Mail } from 'lucide-react';
+import { FlaskConical, Send, CheckCircle2, XCircle, AlertTriangle, Mail, Paperclip } from 'lucide-react';
 
 import { sendTestEmail } from '../services/campaignApi';
 import toast from 'react-hot-toast';
@@ -31,14 +31,17 @@ const TestEmail = ({ campaign }) => {
     <div
       className='
             bg-white
-            dark:bg-slate-900
+            dark:bg-[#11162236]
+            backdrop-blur-sm
             border
-            border-slate-200
-            dark:border-slate-700
+            border-slate-200/80
+            dark:border-white/10
             rounded-2xl
-            shadow-lg
-            hover:shadow-xl
-            transition-all
+            shadow-[0_1px_2px_rgba(0,0,0,0.04),0_12px_32px_-16px_rgba(0,0,0,0.12)]
+            dark:shadow-[0_1px_0_rgba(255,255,255,0.04),0_20px_40px_-20px_rgba(0,0,0,0.6)]
+            hover:border-slate-300
+            dark:hover:border-white/20
+            transition-colors
             duration-300
             p-6
         '
@@ -48,45 +51,38 @@ const TestEmail = ({ campaign }) => {
       <div className='flex items-center gap-4 mb-6'>
         <div
           className='
-                    w-14
-                    h-14
-                    rounded-2xl
-                    bg-linear-to-br
-                    from-orange-500
-                    to-red-500
+                    w-12
+                    h-12
+                    rounded-xl
+                    bg-slate-50
+                    dark:bg-white/3
+                    border
+                    border-slate-200/80
+                    dark:border-white/10
                     flex
                     items-center
                     justify-center
-                    shadow-md
                 '
         >
-          <FlaskConical className='text-white' size={28} />
+          <FlaskConical className='text-orange-600 dark:text-orange-400' size={22} strokeWidth={1.75} />
         </div>
 
         <div>
-          <h2 className='text-xl font-bold text-slate-800 dark:text-white'>Test Email</h2>
+          <h2 className='text-[17px] font-semibold tracking-tight text-slate-900 dark:text-white'>
+            Test Email
+          </h2>
 
-          <p className='text-sm text-slate-500 dark:text-slate-400'>
+          <p className='text-sm text-slate-400 dark:text-slate-500'>
             Verify everything before launching your campaign.
           </p>
         </div>
       </div>
 
-      {/* Email */}
+      {/* Email input */}
 
-      <div
-        className='
-                rounded-2xl
-                border
-                border-slate-200
-                dark:border-slate-700
-                bg-slate-50
-                dark:bg-slate-800/40
-                p-5
-            '
-      >
-        <label className='flex items-center gap-2 mb-3 text-sm font-medium text-slate-700 dark:text-slate-300'>
-          <Mail size={18} />
+      <div>
+        <label className='flex items-center gap-2 mb-2 text-sm font-medium text-slate-600 dark:text-slate-300'>
+          <Mail size={16} strokeWidth={1.75} />
           Recipient Email
         </label>
 
@@ -100,16 +96,18 @@ const TestEmail = ({ campaign }) => {
                     rounded-xl
                     border
                     border-slate-300
-                    dark:border-slate-700
+                    dark:border-white/15
                     bg-white
-                    dark:bg-slate-900
+                    dark:bg-[#0B0F19]
+                    text-slate-800
                     dark:text-white
+                    text-sm
                     px-4
                     py-3
                     outline-none
                     transition
                     focus:ring-2
-                    focus:ring-blue-500
+                    focus:ring-[#C9A227]/50
                     focus:border-transparent
                 '
         />
@@ -117,43 +115,32 @@ const TestEmail = ({ campaign }) => {
 
       {/* Checklist */}
 
-      <div className='mt-6'>
-        <h3 className='font-semibold text-slate-800 dark:text-white mb-4'>Pre-flight Checklist</h3>
+      <div
+        className='
+                mt-5
+                rounded-2xl
+                border
+                border-slate-200/80
+                dark:border-white/10
+                divide-y
+                divide-slate-200/80
+                dark:divide-white/10
+                overflow-hidden
+            '
+      >
+        <Checklist ok={campaign.resume} text='Resume Uploaded' />
 
-        <div className='space-y-3'>
-          <Checklist ok={campaign.resume} text='Resume Uploaded' />
+        <Checklist ok={campaign.subject} text='Subject Configured' />
 
-          <Checklist ok={campaign.subject} text='Subject Configured' />
-
-          <Checklist ok={campaign.total > 0} text={`${campaign.total || 0} Contacts Loaded`} />
-        </div>
+        <Checklist ok={campaign.total > 0} text={`${campaign.total || 0} Contacts Loaded`} />
       </div>
 
       {/* Warning */}
 
-      <div
-        className='
-                mt-6
-                flex
-                gap-3
-                rounded-xl
-                border
-                border-amber-200
-                dark:border-amber-700
-                bg-amber-50
-                dark:bg-amber-900/20
-                p-4
-            '
-      >
-        <AlertTriangle className='text-amber-600 mt-0.5' size={20} />
+      <div className='mt-5 flex items-start gap-2.5 text-sm text-amber-700 dark:text-amber-500/90'>
+        <AlertTriangle size={16} strokeWidth={1.75} className='mt-0.5 shrink-0' />
 
-        <div>
-          <p className='font-medium text-amber-700 dark:text-amber-400'>Recommendation</p>
-
-          <p className='text-sm text-amber-600 dark:text-amber-500'>
-            Always send yourself a test email before starting the bulk campaign.
-          </p>
-        </div>
+        <p>Always send yourself a test email before starting the bulk campaign.</p>
       </div>
 
       {/* Button */}
@@ -168,22 +155,29 @@ const TestEmail = ({ campaign }) => {
                 justify-center
                 items-center
                 gap-2
-                bg-blue-600
-                hover:bg-blue-700
-                disabled:bg-slate-400
+                bg-[#111827]
+                dark:bg-[#C9A227]
+                hover:bg-[#1C2333]
+                dark:hover:bg-[#B8931F]
+                disabled:bg-slate-200
+                dark:disabled:bg-white/10
+                disabled:text-slate-400
+                dark:disabled:text-slate-500
                 disabled:cursor-not-allowed
                 text-white
-                font-semibold
-                py-3.5
+                dark:text-[#0B0F19]
+                font-medium
+                text-sm
+                tracking-tight
+                py-3
                 rounded-xl
-                transition-all
-                duration-300
-                hover:scale-[1.02]
-                active:scale-95
+                transition-colors
+                duration-200
+                active:scale-[0.98]
                 cursor-pointer
             '
       >
-        <Send size={18} />
+        <Send size={16} strokeWidth={2} />
 
         {loading ? 'Sending Test Email...' : 'Send Test Email'}
       </button>
@@ -197,36 +191,33 @@ const Checklist = ({ ok, text }) => (
         flex
         justify-between
         items-center
-        rounded-xl
-        border
-        border-slate-200
-        dark:border-slate-700
-        p-3
+        px-4
+        py-3
         bg-white
-        dark:bg-slate-800
+        dark:bg-transparent
     '
   >
-    <div className='flex items-center gap-3'>
+    <div className='flex items-center gap-2.5'>
       {ok ? (
-        <CheckCircle2 className='text-green-600' size={20} />
+        <CheckCircle2 className='text-emerald-600 dark:text-emerald-400' size={17} strokeWidth={1.75} />
       ) : (
-        <XCircle className='text-red-500' size={20} />
+        <XCircle className='text-rose-400 dark:text-rose-500' size={17} strokeWidth={1.75} />
       )}
 
-      <span className='text-slate-700 dark:text-slate-200'>{text}</span>
+      <span className='text-sm text-slate-700 dark:text-slate-200'>{text}</span>
     </div>
 
     <span
       className={`
                 text-xs
-                font-semibold
-                px-3
-                py-1
+                font-medium
+                px-2.5
+                py-0.5
                 rounded-full
                 ${
                   ok
-                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                    : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                    ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400'
+                    : 'bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400'
                 }
             `}
     >

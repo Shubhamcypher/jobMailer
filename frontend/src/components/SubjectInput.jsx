@@ -39,14 +39,17 @@ const SubjectInput = ({ campaign, setCampaign }) => {
     <div
       className='
             bg-white
-            dark:bg-slate-900
+            dark:bg-[#11162236]
+            backdrop-blur-sm
             border
-            border-slate-200
-            dark:border-slate-700
+            border-slate-200/80
+            dark:border-white/10
             rounded-2xl
-            shadow-lg
-            hover:shadow-xl
-            transition-all
+            shadow-[0_1px_2px_rgba(0,0,0,0.04),0_12px_32px_-16px_rgba(0,0,0,0.12)]
+            dark:shadow-[0_1px_0_rgba(255,255,255,0.04),0_20px_40px_-20px_rgba(0,0,0,0.6)]
+            hover:border-slate-300
+            dark:hover:border-white/20
+            transition-colors
             duration-300
             p-6
         '
@@ -56,25 +59,28 @@ const SubjectInput = ({ campaign, setCampaign }) => {
       <div className='flex items-center gap-4 mb-6'>
         <div
           className='
-                    w-14
-                    h-14
-                    rounded-2xl
-                    bg-linear-to-br
-                    from-purple-500
-                    to-fuchsia-600
+                    w-12
+                    h-12
+                    rounded-xl
+                    bg-slate-50
+                    dark:bg-white/3
+                    border
+                    border-slate-200/80
+                    dark:border-white/10
                     flex
                     items-center
                     justify-center
-                    shadow-md
                 '
         >
-          <Mail className='text-white' size={28} />
+          <Mail className='text-fuchsia-600 dark:text-fuchsia-400' size={22} strokeWidth={1.75} />
         </div>
 
         <div>
-          <h2 className='text-xl font-bold text-slate-800 dark:text-white'>Email Subject</h2>
+          <h2 className='text-[17px] font-semibold tracking-tight text-slate-900 dark:text-white'>
+            Email Subject
+          </h2>
 
-          <p className='text-sm text-slate-500 dark:text-slate-400'>
+          <p className='text-sm text-slate-400 dark:text-slate-500'>
             Configure the subject line used for every email.
           </p>
         </div>
@@ -86,17 +92,17 @@ const SubjectInput = ({ campaign, setCampaign }) => {
         className='
                 rounded-2xl
                 border
-                border-slate-200
-                dark:border-slate-700
-                bg-slate-50
-                dark:bg-slate-800/40
+                border-slate-200/80
+                dark:border-white/10
+                bg-slate-50/60
+                dark:bg-white/2
                 p-5
             '
       >
         <div className='flex items-center gap-2 mb-3'>
-          <Type size={18} className='text-purple-600' />
+          <Type size={16} className='text-slate-400 dark:text-slate-500' strokeWidth={1.75} />
 
-          <span className='text-sm font-medium text-slate-700 dark:text-slate-300'>Subject</span>
+          <span className='text-sm font-medium text-slate-600 dark:text-slate-300'>Subject</span>
         </div>
 
         <textarea
@@ -110,18 +116,20 @@ const SubjectInput = ({ campaign, setCampaign }) => {
                     rounded-xl
                     border
                     border-slate-300
-                    dark:border-slate-700
+                    dark:border-white/15
                     bg-white
-                    dark:bg-slate-900
+                    dark:bg-[#0B0F19]
+                    text-slate-800
                     dark:text-white
-                    placeholder:text-slate-600
-                    dark:placeholder:text-slate-400
+                    placeholder:text-slate-400
+                    dark:placeholder:text-slate-500
+                    text-sm
                     px-4
                     py-3
                     outline-none
                     transition
                     focus:ring-2
-                    focus:ring-blue-500
+                    focus:ring-[#C9A227]/50
                     focus:border-transparent
                 '
         />
@@ -132,42 +140,21 @@ const SubjectInput = ({ campaign, setCampaign }) => {
       <div className='flex justify-between items-center mt-4'>
         <span
           className={`
-                    text-sm
-                    ${subject.length > 100 ? 'text-red-500' : 'text-slate-500 dark:text-slate-400'}
+                    text-xs
+                    ${subject.length > 100 ? 'text-rose-500' : 'text-slate-400 dark:text-slate-500'}
                 `}
         >
           {subject.length}/120 characters
         </span>
 
         {saved && (
-          <div className='flex items-center gap-2 text-green-600 dark:text-green-400'>
-            <CheckCircle2 size={18} />
+          <div className='flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400'>
+            <CheckCircle2 size={16} strokeWidth={1.75} />
 
-            <span className='font-medium'>Saved</span>
+            <span className='text-sm font-medium'>Saved</span>
           </div>
         )}
       </div>
-
-      {/* Preview */}
-
-      {subject && (
-        <div
-          className='
-                        mt-6
-                        rounded-xl
-                        border
-                        border-blue-200
-                        dark:border-blue-800
-                        bg-blue-50
-                        dark:bg-blue-900/20
-                        p-4
-                    '
-        >
-          <p className='text-xs uppercase tracking-wide text-blue-600 font-semibold'>Preview</p>
-
-          <p className='mt-2 font-medium text-slate-800 dark:text-white'>{subject}</p>
-        </div>
-      )}
 
       {/* Button */}
 
@@ -181,22 +168,29 @@ const SubjectInput = ({ campaign, setCampaign }) => {
                 justify-center
                 items-center
                 gap-2
-                bg-blue-600
-                hover:bg-blue-700
-                disabled:bg-slate-400
+                bg-[#111827]
+                dark:bg-[#C9A227]
+                hover:bg-[#1C2333]
+                dark:hover:bg-[#B8931F]
+                disabled:bg-slate-200
+                dark:disabled:bg-white/10
+                disabled:text-slate-400
+                dark:disabled:text-slate-500
                 disabled:cursor-not-allowed
                 text-white
-                font-semibold
-                py-3.5
+                dark:text-[#0B0F19]
+                font-medium
+                text-sm
+                tracking-tight
+                py-3
                 rounded-xl
-                transition-all
-                duration-300
-                hover:scale-[1.02]
-                active:scale-95
+                transition-colors
+                duration-200
+                active:scale-[0.98]
                 cursor-pointer
             '
       >
-        <Save size={18} />
+        <Save size={16} strokeWidth={2} />
 
         {loading ? 'Saving...' : 'Save Subject'}
       </button>
