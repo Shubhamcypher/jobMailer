@@ -84,7 +84,7 @@ const Dashboard = () => {
               </div>
 
               <div>
-                <h1 className='text-3xl font-bold text-slate-800 dark:text-white'>Job Mailer</h1>
+                <h1 className='text-3xl font-bold text-slate-800 dark:text-white'>Job Mailerrrrr</h1>
 
                 <p className='mt-1 text-slate-500 dark:text-slate-400'>
                   Bulk Job Application Platform
