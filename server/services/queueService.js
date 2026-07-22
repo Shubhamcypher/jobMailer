@@ -17,6 +17,7 @@ import { updateCampaignService } from "./campaignDbService.js";
 
 export const processQueue = async () => {
 
+    console.log("processQueue started", new Date().toISOString());
 
     while (true) {
 
@@ -41,6 +42,13 @@ export const processQueue = async () => {
             await resetDailyCounter(dbCampaign.id);
 
         }
+
+        //logging for debugging
+        console.log({
+            sentToday: dbCampaign.sentToday,
+            dailyLimit: dbCampaign.dailyLimit,
+            status: dbCampaign.status,
+        });
 
         // Stop if daily limit reached
         if (dbCampaign.sentToday >= dbCampaign.dailyLimit) {
@@ -85,9 +93,9 @@ export const processQueue = async () => {
             await updateCampaignService({
 
                 status: "completed",
-            
+
                 finishedAt: new Date()
-            
+
             });
 
             updateRuntimeState({
@@ -137,6 +145,14 @@ export const processQueue = async () => {
             await markContactSent(contact.id);
 
             await incrementSentCount(dbCampaign.id);
+
+            //for log later remove
+            const updated = await getCampaignFromDb();
+
+            console.log("After increment:", {
+                sentToday: updated.sentToday,
+                sent: updated.sent,
+            });
 
             updateRuntimeState({
                 currentContact: contact

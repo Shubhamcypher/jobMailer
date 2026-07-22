@@ -26,6 +26,8 @@ export const startCampaignService = async () => {
 
         status: "running",
 
+        dailyLimit: Number(process.env.DAILY_LIMIT),
+        
         startedAt: new Date(),
 
         finishedAt: null
