@@ -21,17 +21,18 @@ jobs:
 
             cd ~/jobMailer
 
-            echo "Pulling latest code..."
-            git fetch origin
+            echo "Fetching latest code..."
+            git fetch --all
             git reset --hard origin/main
+            git clean -fd
 
-            echo "Building and starting containers..."
+            echo "Validating Docker Compose..."
+            docker compose config
+
+            echo "Building and restarting containers..."
             docker compose up -d --build --remove-orphans
 
-            echo "Applying Prisma migrations..."
-            docker compose exec -T server npx prisma migrate deploy
-
-            echo "Cleaning old Docker images..."
+            echo "Removing unused Docker images..."
             docker image prune -af
 
-            echo "Deployment completed!"
+            echo "Deployment completed successfully!"
